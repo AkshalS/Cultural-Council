@@ -1,0 +1,155 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cultural Council</title>
+<link href="{% static 'css/sponsors.css' %}" rel="stylesheet" type="text/css" media="all">
+</head>
+<body style="background-color:white">
+    <header>
+        <div  id="topbar" class="wrapper row0">
+            <div class="login">
+                    {% if request.user.is_authenticated %}
+                            <a name="top"></a><img src="{% static 'images/avatar.jpg' %}" width="15px" height="15px" ></a> &nbsp;
+                            <a style="text-decoration:none;color:pink" href="{% url 'dashboard' %}">{{ uid }}</a> (
+                            <a style="text-decoration:none;color:pink" href="{% url 'logout' %}"> logout</a>)
+                    {% else %}
+                            <a name="top"></a><img src="{% static 'images/login_logo.png' %}" width="15px" height="15px" ></a> &nbsp;
+                            <a style="text-decoration:none;color:pink" href="{% url 'login' %}">LOGIN</a> /
+                            <a style="text-decoration:none;color:pink" href="{% url 'signup' %}"> SIGNUP</a> 
+                    {% endif %}
+            </div>
+            <img src="{% static 'images/call_logo.svg' %}" width="15px" height="15px" >
+            &nbsp; &nbsp; +91-919-813-8020
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <img src="{% static 'images/mail_logo.jpg' %}" width="20px" height="15px" >
+            &nbsp; &nbsp; gensec.cultural@iitbhu.ac.in                             
+        </div>
+    </header>
+<div style="background-color:white">
+    <a href="{% url 'index' %}"><img class="logo1" src="{% static 'images/logo.png' %}"></a>
+</div>
+<header>
+        <div  id="menubar" class="wrapper row0">
+            <a style="text-decoration:none;color:grey" href="{% url 'index' %}">HOME</a> &nbsp; &nbsp; &nbsp; &nbsp;
+            <div class="dropdown">
+                <a href="{% url 'members' %}"><button class="dropbtn">MEMBERS</button></a>
+                <div class="dropdown-content">
+                    <a href="{% url 'masqmem' %}">Masquerades</a>
+                    <a href="{% url 'wmcmem' %}">Western Music Club</a>
+                    <a href="{% url 'quizmem' %}">Quiz Club</a>
+                    <a href="{% url 'facmem' %}">Fine Arts Club</a>
+                    <a href="{% url 'imcmem' %}">Indian Music Club</a>
+                    <a href="{% url 'dfzmem' %}">Dance Freakz</a>
+                    <a href="{% url 'litmem' %}">Literary Club</a>
+                </div>
+            </div>&nbsp; &nbsp; &nbsp; &nbsp;
+            
+            <div class="dropdown">
+                <a href="{% url 'alumini' %}"><button class="dropbtn">ALUMINI</button></a>
+                <div class="dropdown-content">
+                    <a href="{% url 'masqalum' %}">Masquerades</a>
+                    <a href="{% url 'wmcalum' %}">Western Music Club</a>
+                    <a href="{% url 'quizalum' %}">Quiz Club</a>
+                    <a href="{% url 'facalum' %}">Fine Arts Club</a>
+                    <a href="{% url 'imcalum' %}">Indian Music Club</a>
+                    <a href="{% url 'dfzalum' %}">Dance Freakz</a>
+                    <a href="{% url 'litalum' %}">Literary Club</a>
+                </div>
+            </div>&nbsp; &nbsp; &nbsp; &nbsp;
+            <a style="text-decoration:none;color:grey" href="{% url 'sponsors' %}">SPONSORS</a>&nbsp; &nbsp; &nbsp; &nbsp;
+            <a style="text-decoration:none;color:grey" href="{% url 'merchandise' %}">MERCHANDISE</a>&nbsp; &nbsp; &nbsp; &nbsp;
+            <a style="text-decoration:none;color:grey" href="{% url 'events' %}">EVENTS</a>&nbsp; &nbsp; &nbsp; &nbsp;
+            <a style="text-decoration:none;color:grey" href="{% url 'contact' %}">CONTACT US</a>
+        </div>
+      </header>
+
+      <div id="spon">
+            <br>
+            <br>
+                {% for fb in data %}
+                    <div class="imag">
+                        <img src="{% static fb.5 %}" alt="event" width="250px" height="250px" />
+                        <br>
+                        {% if request.user.is_superuser %}
+                            Name &nbsp;&nbsp;&nbsp;&nbsp;: {{ fb.1 }}<br>
+                            Address : {{ fb.2 }}<br>
+                            Email &nbsp;&nbsp;&nbsp;&nbsp;: {{ fb.3 }}<br>
+                            Mobile &nbsp;&nbsp;: {{ fb.4 }}<br>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+    </div>
+    <div class="feedback">
+        {% if request.user.is_superuser %}
+            <form id="sponsors_form" action="/sponsors/" method="POST" enctype='multipart/form-data'>
+                {% csrf_token %}
+                <center>
+                    <h1>Add Sponsor</h1>
+                </center>
+                {% if messages %}
+                <br>
+                <br>
+                <center>
+                <div style="max-width:550px;">
+                    {% for message in messages %}
+                    <div {% if message.tags == 'error' %} class="alert alert-danger" role="alert" {% else %} class="alert alert-success" {% endif %}>{{ message }}</div>
+                    {% endfor %}
+                </div>
+                </center>
+                {% endif %}
+                
+                <div class="container">
+                    <br><br>
+                    <label><b>Sponsor's Name</b></label>
+                    <input type="text" placeholder="Enter Sponsor's Name" name="sname" required>
+                    <br>
+                    <label><b>Email Address</b></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" placeholder="Enter Email Address" name="email">
+                    <br>
+                    <label><b>Person's Name</b></label>&nbsp;&nbsp;&nbsp;
+                    <input type="text" placeholder="Enter Person's Name" name="pname">
+                    <br>
+                    <label><b>Person's Post</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" placeholder="Enter Post" name="post">
+                    <br>
+                    <label><b>Mobile No</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" placeholder="Enter Mobile No." name="mob">
+                    <br>
+                    <label><b>Address</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" placeholder="Enter Address" name="address">
+                    <br>
+                    <label><b>Upload Logo</b></label>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="file" name="logo">
+                    <br><br>
+                    <button type="submit">Upload</button>
+                    <br>
+                    <br>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+
+    <div id="footer">
+            &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+            <a style="text-decoration:none;color:white" href="{% url 'index' %}">HOME</a> &nbsp; &nbsp; | &nbsp; &nbsp;
+            <a style="text-decoration:none;color:white" href="{% url 'members' %}">MEMBERS</a> &nbsp; &nbsp; | &nbsp; &nbsp;
+            <a style="text-decoration:none;color:white" href="{% url 'alumini' %}">ALUMINI</a>&nbsp; &nbsp; | &nbsp; &nbsp;
+            <a style="text-decoration:none;color:white" href="{% url 'sponsors' %}">SPONSORS</a>&nbsp; &nbsp; | &nbsp; &nbsp;
+            <a style="text-decoration:none;color:white" href="{% url 'merchandise' %}">MERCHANDISE</a>&nbsp; &nbsp; | &nbsp; &nbsp;
+            <a style="text-decoration:none;color:white" href="{% url 'events' %}">EVENTS</a>&nbsp; &nbsp; | &nbsp; &nbsp;
+            <a style="text-decoration:none;color:white" href="{% url 'contact' %}">CONTACT US</a>
+            <br>
+            <br>
+            <br>
+            <div id="xoxo">
+            Copyright @2017 <br>
+            Site developed by Akshal
+            <div id="links">
+                    <a href="https://www.facebook.com/cultcouncil.iitbhu/"><img style="padding-bottom: 20px" src="{% static 'images/fblogo.png' %}" width="45px" height="45px" ></a>&nbsp; &nbsp;  
+                    <a href="https://www.instagram.com/cultcouncil.iitbhu/"><img style="padding-bottom: 0px" src="{% static 'images/instagram.png' %}" width="85px" height="85px" ></a>
+            </div>
+            </div>
+    </div>
+</body>
+</html>
